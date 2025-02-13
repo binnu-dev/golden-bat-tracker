@@ -18,31 +18,38 @@ const GoldenBatValue = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchGoldPrice = async () => {
-      try {
-        const response = await fetch('https://apis.data.go.kr/1160100/service/GetGeneralProductInfoService/getGoldPriceInfo?serviceKey=29w1mKji5S91PPngyzFuMXIOkeSzB5%2BQngk3qB6QNqte4pCKV54v%2BdH7xV15yxOK8ZijDTp2OCsT5tPucq9luQ%3D%3D&');
-        const text = await response.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, "text/xml");
-        
-        // Get the first gold price (most recent)
-        const firstItem = xmlDoc.querySelector('item');
-        if (firstItem) {
-          const pricePerKg = parseFloat(firstItem.querySelector('clpr')?.textContent || '0');
-          setCurrentGoldPrice(pricePerKg); // This is price per kg
-          setLoading(false);
-        } else {
-          throw new Error('No gold price data available');
-        }
-      } catch (err) {
-        setError('금시세를 불러오는데 실패했습니다');
-        setLoading(false);
-      }
-    };
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
-    fetchGoldPrice();
-  }, []);
+  useEffect(() => {
+      const fetchGoldPrice = async () => {
+        try {
+          const response = await fetch('https://apis.data.go.kr/1160100/service/GetGeneralProductInfoService/getGoldPriceInfo?serviceKey=29w1mKji5S91PPngyzFuMXIOkeSzB5%2BQngk3qB6QNqte4pCKV54v%2BdH7xV15yxOK8ZijDTp2OCsT5tPucq9luQ%3D%3D&');
+          const text = await response.text();
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(text, "text/xml");
+          
+          const firstItem = xmlDoc.querySelector('item');
+          if (firstItem) {
+            const pricePerKg = parseFloat(firstItem.querySelector('clpr')?.textContent || '0');
+            const baseDate = firstItem.querySelector('basDt')?.textContent || '';
+            
+            // Format date from YYYYMMDD to YYYY.MM.DD
+            const formattedDate = `${baseDate.slice(0, 4)}.${baseDate.slice(4, 6)}.${baseDate.slice(6, 8)}`;
+            
+            setCurrentGoldPrice(pricePerKg); // This is price per kg
+            setLastUpdated(formattedDate);
+            setLoading(false);
+          } else {
+            throw new Error('No gold price data available');
+          }
+        } catch (err) {
+          setError('금시세를 불러오는데 실패했습니다');
+          setLoading(false);
+        }
+      };
+  
+      fetchGoldPrice();
+    }, []);
 
   // 현재 가치 계산
   const calculateCurrentValue = () => {
