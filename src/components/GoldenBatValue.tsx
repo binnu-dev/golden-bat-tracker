@@ -72,12 +72,12 @@ const GoldenBatValue = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300">
               <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                이미지 1 (전면)
+                <img src="https://image.edaily.co.kr/images/photo/files/NP/S/2025/02/PS25021201421.jpg"></img>
               </div>
             </div>
             <div className="relative aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300">
               <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                이미지 2 (측면)
+                <img src="http://www.gjdaily.net/news/photo/201904/46182_46800_4227.jpg"></img>
               </div>
             </div>
           </div>
