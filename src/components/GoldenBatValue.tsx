@@ -189,6 +189,11 @@ const GoldenBatValue = () => {
                   <p className="text-lg font-bold text-amber-900">
                     {currentGoldPrice ? `${currentGoldPrice.toLocaleString()}원/g` : '로딩중...'}
                   </p>
+                  {lastUpdated && (
+                    <p className="text-xs text-amber-700 mt-1">
+                      {lastUpdated} 기준
+                    </p>
+                  )}
                 </div>
 
                 <div className="p-4 bg-emerald-50 rounded-lg">
